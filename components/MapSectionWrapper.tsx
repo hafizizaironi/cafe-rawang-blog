@@ -13,7 +13,7 @@ export default function MapSectionWrapper({ cafes }: MapSectionWrapperProps) {
   const mapRef = useRef<HTMLDivElement>(null);
 
   const scrollToMap = () => {
-    mapRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    mapRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
