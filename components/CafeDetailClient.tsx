@@ -9,10 +9,16 @@ import { Cafe } from '@/types/cafe';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PLACEHOLDER_GRADIENTS = [
+const CAFE_GRADIENTS = [
   'linear-gradient(135deg, #1a0f07 0%, #7a8c5e 100%)',
   'linear-gradient(160deg, #2d1a0e 0%, #c4622d 100%)',
   'linear-gradient(135deg, #7a8c5e 0%, #1a0f07 100%)',
+];
+
+const STALL_GRADIENTS = [
+  'linear-gradient(135deg, #0e1e10 0%, #6aaa6a 100%)',
+  'linear-gradient(160deg, #1a3520 0%, #d4952a 100%)',
+  'linear-gradient(135deg, #6aaa6a 0%, #0e1e10 100%)',
 ];
 
 const easeOut: Easing = 'easeOut';
@@ -42,6 +48,14 @@ export default function CafeDetailClient({ cafe }: CafeDetailClientProps) {
   const router = useRouter();
   const heroRef = useRef<HTMLDivElement>(null);
   const heroInnerRef = useRef<HTMLDivElement>(null);
+
+  const isStall = cafe.type === 'stall';
+  const gradients = isStall ? STALL_GRADIENTS : CAFE_GRADIENTS;
+  const accent = isStall ? '#d4952a' : '#c4622d';
+  const accentBg = isStall ? '#0e1e10' : '#1a0f07';
+  const emoji = isStall ? '🍜' : '☕';
+  const typeLabel = isStall ? 'Street Stall' : 'Café';
+  const backLabel = isStall ? 'Back to all stalls' : 'Back to all cafés';
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -75,7 +89,8 @@ export default function CafeDetailClient({ cafe }: CafeDetailClientProps) {
       <div className="fixed top-5 left-5 z-50">
         <button
           onClick={() => router.push('/')}
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-espresso/90 text-cream text-sm font-medium backdrop-blur-sm hover:bg-espresso transition-colors shadow-lg"
+          className="flex items-center gap-2 px-4 py-2 rounded-full text-cream text-sm font-medium backdrop-blur-sm transition-colors shadow-lg"
+          style={{ background: `${accentBg}e6` }}
         >
           ← Back
         </button>
@@ -86,17 +101,27 @@ export default function CafeDetailClient({ cafe }: CafeDetailClientProps) {
         <div
           ref={heroInnerRef}
           className="absolute inset-0 w-full h-[130%] -top-[15%] flex items-center justify-center"
-          style={{ background: PLACEHOLDER_GRADIENTS[0] }}
+          style={{ background: gradients[0] }}
         >
-          <div className="text-[8rem] opacity-20 select-none">☕</div>
+          <div className="text-[8rem] opacity-20 select-none">{emoji}</div>
         </div>
-        {/* Gradient overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-espresso/80 via-espresso/30 to-transparent" />
 
         <div className="absolute bottom-8 left-6 md:left-12">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest border border-terracotta/60 text-terracotta mb-3">
-            {cafe.neighborhood}
-          </span>
+          <div className="flex items-center gap-2 mb-3">
+            <span
+              className="inline-block px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest border"
+              style={{ borderColor: `${accent}99`, color: accent }}
+            >
+              {cafe.neighborhood}
+            </span>
+            <span
+              className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest"
+              style={{ background: `${accentBg}cc`, color: accent, border: `1px solid ${accent}55` }}
+            >
+              {typeLabel}
+            </span>
+          </div>
           <h1 className="font-display text-4xl md:text-6xl font-bold text-cream leading-tight drop-shadow-lg">
             {cafe.name}
           </h1>
@@ -137,7 +162,12 @@ export default function CafeDetailClient({ cafe }: CafeDetailClientProps) {
               {cafe.vibeTags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-3 py-0.5 rounded-full text-xs font-semibold bg-terracotta/15 text-terracotta border border-terracotta/30"
+                  className="px-3 py-0.5 rounded-full text-xs font-semibold"
+                  style={{
+                    background: `${accent}18`,
+                    color: accent,
+                    border: `1px solid ${accent}40`,
+                  }}
                 >
                   {tag}
                 </span>
@@ -167,18 +197,16 @@ export default function CafeDetailClient({ cafe }: CafeDetailClientProps) {
               <div
                 key={i}
                 className="flex-shrink-0 w-72 h-52 rounded-xl overflow-hidden snap-start"
-                style={{
-                  background: PLACEHOLDER_GRADIENTS[i % PLACEHOLDER_GRADIENTS.length],
-                }}
+                style={{ background: gradients[i % gradients.length] }}
               >
                 <div className="w-full h-full flex items-center justify-center text-5xl opacity-25">
-                  ☕
+                  {emoji}
                 </div>
               </div>
             ))}
           </div>
           <p className="text-espresso/40 text-xs mt-2 italic">
-            Photos coming soon — drop JPEGs into /public/images/cafes/
+            Photos coming soon — drop JPEGs into /public/images/{isStall ? 'stalls' : 'cafes'}/
           </p>
         </motion.div>
 
@@ -193,22 +221,43 @@ export default function CafeDetailClient({ cafe }: CafeDetailClientProps) {
           </h2>
           <div className="text-espresso/75 leading-relaxed space-y-5 text-base md:text-lg">
             <p>{cafe.description}</p>
-            <p>
-              Whether you&rsquo;re a Rawang local or just passing through on your way up north,{' '}
-              <strong className="text-espresso font-semibold">{cafe.name}</strong> is the kind of
-              place that earns a spot on your regular rotation. It&rsquo;s not trying to be
-              Instagram-perfect (though it often is); it&rsquo;s just doing what a great cafe
-              does — making you feel like you belong.
-            </p>
-            <p>
-              We visited on a quiet Tuesday afternoon and left wishing we&rsquo;d given ourselves
-              more time. Next visit: bring a book, order two drinks, and settle in.
-            </p>
+            {isStall ? (
+              <>
+                <p>
+                  Whether you&rsquo;re a Rawang local or just cruising through late at night,{' '}
+                  <strong className="text-espresso font-semibold">{cafe.name}</strong> is the kind
+                  of street stall that reminds you why simple, honest food hits harder than anything
+                  off a fancy menu. No frills, no reservations — just show up, grab a seat, and
+                  let the wok do the talking.
+                </p>
+                <p>
+                  We stumbled in past 10 PM on a weeknight and ended up staying for two rounds.
+                  Next visit: come hungry, and definitely try the soup version.
+                </p>
+              </>
+            ) : (
+              <>
+                <p>
+                  Whether you&rsquo;re a Rawang local or just passing through on your way up north,{' '}
+                  <strong className="text-espresso font-semibold">{cafe.name}</strong> is the kind of
+                  place that earns a spot on your regular rotation. It&rsquo;s not trying to be
+                  Instagram-perfect (though it often is); it&rsquo;s just doing what a great café
+                  does — making you feel like you belong.
+                </p>
+                <p>
+                  We visited on a quiet Tuesday afternoon and left wishing we&rsquo;d given ourselves
+                  more time. Next visit: bring a book, order two drinks, and settle in.
+                </p>
+              </>
+            )}
           </div>
         </motion.article>
 
         {/* Map embed hint */}
-        <div className="mt-12 p-6 rounded-2xl bg-espresso text-cream flex flex-col md:flex-row items-start md:items-center gap-4">
+        <div
+          className="mt-12 p-6 rounded-2xl text-cream flex flex-col md:flex-row items-start md:items-center gap-4"
+          style={{ background: accentBg }}
+        >
           <div className="text-3xl">📍</div>
           <div>
             <p className="font-semibold mb-0.5">{cafe.name}</p>
@@ -221,7 +270,8 @@ export default function CafeDetailClient({ cafe }: CafeDetailClientProps) {
             href={`https://www.openstreetmap.org/?mlat=${cafe.lat}&mlon=${cafe.lng}#map=17/${cafe.lat}/${cafe.lng}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="md:ml-auto flex-shrink-0 px-4 py-2 bg-terracotta rounded-lg text-sm font-medium hover:bg-terracotta/80 transition-colors"
+            className="md:ml-auto flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors text-cream"
+            style={{ background: accent }}
           >
             Open in maps →
           </a>
@@ -231,9 +281,10 @@ export default function CafeDetailClient({ cafe }: CafeDetailClientProps) {
         <div className="mt-12 text-center">
           <button
             onClick={() => router.push('/')}
-            className="inline-flex items-center gap-2 text-terracotta font-semibold hover:gap-3 transition-all duration-200"
+            className="inline-flex items-center gap-2 font-semibold hover:gap-3 transition-all duration-200"
+            style={{ color: accent }}
           >
-            ← Back to all cafes
+            ← {backLabel}
           </button>
         </div>
       </div>

@@ -15,6 +15,11 @@ const config: Config = {
         "cream-dark": "#e8ddd0",
         terracotta: "#c4622d",
         olive: "#7a8c5e",
+        hawker: "#0e1e10",
+        "hawker-light": "#1a3520",
+        saffron: "#d4952a",
+        "saffron-light": "#f0b84a",
+        mint: "#6aaa6a",
       },
       fontFamily: {
         sans: ["DM Sans", "sans-serif"],

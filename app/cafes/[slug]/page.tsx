@@ -1,26 +1,32 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { notFound } from 'next/navigation';
-import cafesData from '@/data/cafes.json';
 import { Cafe } from '@/types/cafe';
 import CafeDetailClient from '@/components/CafeDetailClient';
+import { getPlaceBySlug } from '@/lib/firestore';
 
-const cafes = cafesData as Cafe[];
+export default function CafePage() {
+  const params = useParams();
+  const slug = typeof params.slug === 'string' ? params.slug : Array.isArray(params.slug) ? params.slug[0] : '';
 
-export function generateStaticParams() {
-  return cafes.map((cafe) => ({ slug: cafe.slug }));
-}
+  const [cafe, setCafe] = useState<Cafe | null | 'loading'>('loading');
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const cafe = cafes.find((c) => c.slug === params.slug);
-  if (!cafe) return {};
-  return {
-    title: `${cafe.name} — Cafes Around Rawang`,
-    description: cafe.tagline,
-  };
-}
+  useEffect(() => {
+    if (!slug) { setCafe(null); return; }
+    getPlaceBySlug(slug).then(setCafe).catch(() => setCafe(null));
+  }, [slug]);
 
-export default function CafePage({ params }: { params: { slug: string } }) {
-  const cafe = cafes.find((c) => c.slug === params.slug);
-  if (!cafe) notFound();
+  if (cafe === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-espresso">
+        <span className="text-5xl animate-pulse">☕</span>
+      </div>
+    );
+  }
+
+  if (!cafe) return notFound();
 
   return <CafeDetailClient cafe={cafe} />;
 }

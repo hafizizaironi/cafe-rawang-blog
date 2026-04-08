@@ -4,6 +4,7 @@
     "slug": "kopitiam-bukit-sentosa",
     "name": "Kopitiam Bukit Sentosa",
     "neighborhood": "Bukit Sentosa",
+    "type": "cafe",
     "lat": 3.3812,
     "lng": 101.5598,
     "tagline": "Old-school charm meets freshly brewed magic",
@@ -21,6 +22,7 @@
     "slug": "the-rawang-roast",
     "name": "The Rawang Roast",
     "neighborhood": "Rawang Town",
+    "type": "cafe",
     "lat": 3.3756,
     "lng": 101.5712,
     "tagline": "Specialty beans, slow pour, fast friends",
@@ -38,6 +40,7 @@
     "slug": "sentosa-garden-cafe",
     "name": "Sentosa Garden Café",
     "neighborhood": "Bukit Sentosa",
+    "type": "cafe",
     "lat": 3.3830,
     "lng": 101.5560,
     "tagline": "Bloom, brew, and breathe easy",
@@ -48,6 +51,24 @@
       "/images/cafes/cafe3-1.jpg",
       "/images/cafes/cafe3-2.jpg",
       "/images/cafes/cafe3-3.jpg"
+    ]
+  },
+  {
+    "id": "4",
+    "slug": "maggi-sukiya",
+    "name": "Maggi Sukiya",
+    "neighborhood": "Rawang",
+    "type": "stall",
+    "lat": 3.406443751311674,
+    "lng": 101.57134626568607,
+    "tagline": "Soupy, soulful, and gone by midnight",
+    "hours": "6:00 PM – 1:00 AM (Daily)",
+    "vibeTags": ["late night", "comfort food", "street food", "must try"],
+    "description": "Maggi Sukiya is the kind of roadside stall that regulars fiercely guard like a secret — until word spreads on its own. Set up under warm fluorescent light with plastic stools and a battered wok, this stall dishes out Maggi goreng and Maggi sup that hit different after 10 PM. The broth is deep and spiced just right, the noodles have that perfect smoky bite from a well-seasoned wok, and the portions are generous enough to make you forget you only planned to have a light supper. There's no fancy decor, no WiFi — just good food, fast service, and the kind of warmth you only find at a place that's been feeding the neighbourhood for years.",
+    "photos": [
+      "/images/stalls/stall1-1.jpg",
+      "/images/stalls/stall1-2.jpg",
+      "/images/stalls/stall1-3.jpg"
     ]
   }
 ]
